@@ -172,7 +172,8 @@ spec:
             cpu: 100m
             memory: 200Mi
         ports:
-        - containerPort: ${6:8080}
+        - name: ${6:$1-port}
+          containerPort: ${7:8080}
         readinessProbe:
           tcpSocket:
             port: $6
@@ -197,7 +198,7 @@ metadata:
   namespace: $2
 spec:
   ports:
-  - port: ${7:80}
+  - port: ${8:80}
     targetPort: $6
   selector:
     app: $1
@@ -209,18 +210,18 @@ metadata:
   name: $1
   namespace: $2
 spec:
-  ${10:tls:
-  - secretName: ${9:$8.tls}
+  ${11:tls:
+  - secretName: ${10:$9.tls}
     hosts:
-    - $8
+    - $9
   }rules:
-  - host: ${8:host}
+  - host: ${9:host}
     http:
       paths:
-      - path: ${11:/}
+      - path: ${12:/}
         backend:
           serviceName: $1
-          servicePort: $7
+          servicePort: $8
 endsnippet
 
 snippet pv "PersistentVolume" !b
