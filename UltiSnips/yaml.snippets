@@ -48,7 +48,11 @@ spec:
             cpu: 100m
             memory: 200Mi
         ports:
-        - containerPort: ${6:8080}
+        - name: ${6:$1-port}
+          containerPort: ${7:8080}
+        envFrom:
+        - secretRef:
+          name: $1-config
         readinessProbe:
           tcpSocket:
             port: $6
@@ -109,7 +113,11 @@ spec:
             cpu: 100m
             memory: 200Mi
         ports:
-        - containerPort: ${6:8080}
+        - name: ${6:$1-port}
+          containerPort: ${7:8080}
+        envFrom:
+        - secretRef:
+          name: $1-config
         readinessProbe:
           tcpSocket:
             port: $6
