@@ -441,3 +441,123 @@ strategy:
     maxSurge: ${2:1}
     maxUnavailable: ${3:1}$0
 endsnippet
+
+snippet probe "Liveness/Readiness Probes" !b
+livenessProbe: &probe
+  initialDelaySeconds: ${1:1}
+  periodSeconds: 3
+  timeoutSeconds: 2
+  httpGet:
+    port: ${2:80}
+    path: ${3:/health_check}
+    httpHeaders:
+    - name: ${4:Host}
+      value: ${5}
+  exec:
+    command:
+    - /bin/sh
+    - -c
+    - echo "test"
+  tcpSocket:
+    port: 80
+readinessProbe: *probe $0
+  initialDelaySeconds: ${1:1}
+  periodSeconds: 3
+  timeoutSeconds: 2
+  httpGet:
+    port: ${2:80}
+    path: ${3:/health_check}
+    - name: ${4:Host}
+      value: ${5}
+  exec:
+    command:
+    - /bin/sh
+    - -c
+    - echo "test"
+  tcpSocket:
+    port: 80
+endsnippet
+
+snippet lprobe "Liveness Probes" !b
+livenessProbe: &lprobe
+  initialDelaySeconds: ${1:1}
+  periodSeconds: 3
+  timeoutSeconds: 2
+  httpGet:
+    port: ${2:80}
+    path: ${3:/health_check}
+    httpHeaders:
+    - name: ${4:Host}
+      value: ${5}
+  exec:
+    command:
+    - /bin/sh
+    - -c
+    - echo "test"
+  tcpSocket:
+    port: 80
+endsnippet
+
+snippet rprobe "Readiness Probes" !b
+readinessProbe: &rprobe
+  initialDelaySeconds: ${1:1}
+  periodSeconds: 3
+  timeoutSeconds: 2
+  httpGet:
+    port: ${2:80}
+    path: ${3:/health_check}
+    httpHeaders:
+    - name: ${4:Host}
+      value: ${5}
+  exec:
+    command:
+    - /bin/sh
+    - -c
+    - echo "test"
+  tcpSocket:
+    port: 80
+endsnippet
+
+snippet evolume "Empty Volume" !b
+- name: ${1:name}
+  emptyDir: {}
+endsnippet
+
+snippet hvolume "HostPath Volume" !b
+- name: ${1:name}
+  hostPath:
+    path: /home/data
+endsnippet
+
+snippet cvolume "ConfigMap Volume" !b
+- name: ${1:name}
+  configMap:
+  name: ${2: name}
+    defaultMode: 420
+    items:
+    - key:
+      path:
+endsnippet
+
+snippet mount "Mount Volumes" !b
+volumeMounts:
+- mountPath: ${2:/app_conf/}
+  name: ${1:name}
+endsnippet
+
+snippet mountfile "Mount Volumes as File" !b
+volumeMounts:
+- mountPath: ${3:/app_conf/app1.config}
+  subPath: ${2:app1.config}
+  name: ${1:name}
+endsnippet
+
+snippet life "Container hooks" !b
+lifecycle:
+  preStop:
+    exec:
+      command:
+  postStart:
+    exec:
+      command:
+endsnippet
